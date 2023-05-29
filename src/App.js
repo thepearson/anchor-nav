@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext } from 'react'
+import AnchorMenu from './components/AnchorMenu';
+import Page from './components/Page';
 
-function App() {
+export const AnchorMenuContext = createContext(null);
+
+export default function App() {
+  const [links, setLinks] = React.useState([]);
+  const showAnchors = true;
+
+  const addLink = (link) => {
+    if (links.filter(e => e.id === link.id).length > 0) return;
+    setLinks([link, ...links]);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Anchor links demo</h1>
+
+      
+      <AnchorMenuContext.Provider value={{links: links, addLink: addLink}}>
+        <div className="flex">
+          {showAnchors && links.length > 0 && 
+            <div className="w-1/6">
+              <AnchorMenu title="QuickLinks" links={links} />
+            </div>}
+          <div className="w-5/6">
+            <Page />
+          </div>
+        </div>
+
+      </AnchorMenuContext.Provider>
     </div>
   );
 }
-
-export default App;
